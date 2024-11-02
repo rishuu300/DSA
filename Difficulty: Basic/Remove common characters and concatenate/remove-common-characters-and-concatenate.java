@@ -31,17 +31,24 @@ class Solution
     //Function to remove common characters and concatenate two strings.
     public static String concatenatedString(String s1,String s2)
     {
-        String str = "";
+        HashMap<Character, Integer> map = new HashMap<>();
+        for(int i=0; i<s2.length(); i++){
+            map.put(s2.charAt(i), 1);
+        }
         
-        for(char ch : s1.toCharArray()){
-            if(s2.indexOf(ch) == -1){
-                str += ch;
+        String str = "";
+        for(int i=0; i<s1.length(); i++){
+            if(!map.containsKey(s1.charAt(i))){
+                str += s1.charAt(i);
+            }
+            else{
+                map.put(s1.charAt(i), 2);
             }
         }
         
-        for(char ch : s2.toCharArray()){
-            if(s1.indexOf(ch) == -1){
-                str += ch;
+        for(int i=0; i<s2.length(); i++){
+            if(map.get(s2.charAt(i)) == 1){
+                str += s2.charAt(i);
             }
         }
         
