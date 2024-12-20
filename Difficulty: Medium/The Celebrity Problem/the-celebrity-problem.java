@@ -29,10 +29,6 @@ System.out.println("~");
 // User function Template for Java
 
 class Solution {
-    public boolean knows(int mat[][], int a, int b){
-        return mat[a][b] == 1;
-    }
-    
     public int celebrity(int mat[][]) {
         Stack<Integer> s = new Stack<>();
         int n = mat.length;
@@ -45,7 +41,7 @@ class Solution {
             int a = s.pop();
             int b = s.pop();
             
-            if(knows(mat, a, b)){
+            if(mat[a][b] == 1){
                 s.push(b);
             }
             else{
