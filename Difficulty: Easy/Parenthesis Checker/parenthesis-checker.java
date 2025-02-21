@@ -17,7 +17,7 @@ class Driverclass {
             // calling ispar method of Paranthesis class
             // and printing "balanced" if it returns true
             // else printing "not balanced"
-            if (new Solution().isParenthesisBalanced(st) == true)
+            if (new Solution().isBalanced(st) == true)
                 System.out.println("true");
             else
                 System.out.println("false");
@@ -31,29 +31,26 @@ class Driverclass {
 
 
 class Solution {
-    static boolean isPair(char ch1, char ch2){
-        return ((ch1 == '{' && ch2 == '}') || (ch1 == '(' && ch2 == ')') || (ch1 == '[' && ch2 == ']'));
+    public static boolean isPair(char c1, char c2){
+        return (c1=='{' && c2=='}' || c1=='[' && c2==']' || c1=='(' && c2==')');
     }
     
-    static boolean isParenthesisBalanced(String str) {
+    static boolean isBalanced(String str) {
         Stack<Character> s = new Stack<>();
-        
         for(int i=0; i<str.length(); i++){
-            char ch = str.charAt(i);
-            
-            if(ch == '{' || ch == '(' || ch == '['){
-                s.push(ch);
+            char c = str.charAt(i);
+            if(c=='{' || c=='[' || c=='('){
+                s.push(c);
             }
             else{
-                if(s.isEmpty() || !isPair(s.peek(), ch)){
-                    return false;
-                }
-                else{
-                    s.pop();
-                }
+                if(s.isEmpty())
+                   return false;
+                else if(!isPair(s.peek(),c))
+                   return false;
+                else
+                   s.pop();
             }
         }
-        
         return s.isEmpty();
     }
 }
