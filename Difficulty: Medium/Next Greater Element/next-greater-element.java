@@ -36,28 +36,20 @@ class Geeks {
 
 
 class Solution {
-    // Function to find the next greater element for each element of the array.
     public ArrayList<Integer> nextLargerElement(int[] arr) {
         int n = arr.length;
-        ArrayList<Integer> res = new ArrayList<>(n);
-        Stack<Integer> s = new Stack<>();
+        ArrayList<Integer> result = new ArrayList<>(Collections.nCopies(n, -1));
+        Stack<Integer> stack = new Stack<>();
         
-        for(int i=0; i<n; i++){
-            res.add(0);
-        }
-        
-        s.push(arr[n-1]); res.set(n-1, -1);
-        
-        for(int i=n-2; i>=0; i--){
-            while(!s.isEmpty() && arr[i] >= s.peek()){
-                s.pop();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= arr[i]) {
+                stack.pop();
             }
-            
-            int element = (s.isEmpty()) ? -1 : s.peek();
-            res.set(i, element);
-            s.push(arr[i]);
+            if (!stack.isEmpty()) {
+                result.set(i, stack.peek());
+            }
+            stack.push(arr[i]);
         }
-        
-        return res;
+        return result;
     }
 }
