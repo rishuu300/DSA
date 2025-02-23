@@ -117,12 +117,15 @@ class GfG {
 
 /*Complete the given function
 Node is as follows:
-class Tree{
+class Node {
     int data;
-    Tree left,right;
-    Tree(int d){
-        data=d;
-        left=right=null;
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
     }
 }*/
 
@@ -130,19 +133,19 @@ class Tree {
     // Function to serialize a tree and return a list containing nodes of tree.
     public ArrayList<Integer> serialize(Node root) {
         ArrayList<Integer> al = new ArrayList<>();
-        solve(root, al);
+        traversal(root, al);
         return al;
     }
     
-    void solve(Node root, ArrayList<Integer> al){
-        if(root==null){
-	       al.add(-1);
-	       return;
-	    }
-	      
-	    al.add(root.data);
-	    solve(root.left,al);
-	    solve(root.right,al);
+    void traversal(Node root, ArrayList<Integer> al){
+        if(root == null){
+            al.add(-1);
+            return;
+        }
+        
+        al.add(root.data);
+        traversal(root.left, al);
+        traversal(root.right, al);
     }
 
     // Function to deserialize a list and construct the tree.
@@ -158,9 +161,12 @@ class Tree {
         
         int data = al.get(idx[0]++);
         
-        if(data==-1) return null;
+        if(data == -1){
+            return null;
+        }
         
         Node root = new Node(data);
+        
         root.left = solve(al, idx);
         root.right = solve(al, idx);
         
