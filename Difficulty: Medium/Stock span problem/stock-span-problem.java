@@ -38,29 +38,24 @@ class Main {
 
 
 class Solution {
-    // Function to calculate the span of stock's price for all n days.
-    public ArrayList<Integer> calculateSpan(int[] prices) {
-        int n = prices.length;
+    public ArrayList<Integer> calculateSpan(int[] price) {
+        int n = price.length;
+        
+        ArrayList<Integer> arr = new ArrayList<>(Collections.nCopies(n, -1));
         Stack<Integer> s = new Stack<>();
-        ArrayList<Integer> spans = new ArrayList<>(n);
         
-        for (int i = 0; i < n; i++) {
-            spans.add(0);
-        }
+        s.push(0); arr.set(0, 1);
         
-        s.push(0); spans.set(0, 1);
-        
-        for(int i=0; i<n; i++){
-            while(!s.isEmpty() && prices[i] >= prices[s.peek()]){
+        for(int i=1; i<n; i++){
+            while(!s.isEmpty() && price[i]>=price[s.peek()]){
                 s.pop();
             }
             
-            int span = (s.isEmpty()) ? (i + 1) : (i - s.peek());
-            
-            spans.set(i, span);
+            int span = (s.isEmpty())? (i+1) : (i-s.peek());
+            arr.set(i, span);
             s.push(i);
         }
         
-        return spans;
+        return arr;
     }
 }
