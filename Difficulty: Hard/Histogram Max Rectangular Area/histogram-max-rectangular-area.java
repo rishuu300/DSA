@@ -6,31 +6,32 @@ import java.util.*;
 
 
 // } Driver Code Ends
+
 class Solution {
-    // Function to find largest rectangular area possible in a given histogram.
-    public static int getMaxArea(int arr[]) {
+    public static int getMaxArea(int hist[]) {
+        int n = hist.length;
         Stack<Integer> s = new Stack<>();
-        int res = Integer.MIN_VALUE;
-        int n = arr.length;
+        int res = 0;
         
         for(int i=0; i<n; i++){
-            while(!s.isEmpty() && arr[i] <= arr[s.peek()]){
+            while(!s.isEmpty() && hist[i]<=hist[s.peek()]){
                 int top = s.pop();
-                int curr = arr[top] * (s.isEmpty() ? i : (i-s.peek()-1));
-                res = Math.max(res, curr);
+                int curr = hist[top] * ((s.isEmpty()) ? i : (i-s.peek()-1));
+                res = Math.max(res,curr);
             }
-            s.push(i);
+            s.push((int)i);
         }
         
         while(!s.isEmpty()){
             int top = s.pop();
-            int curr = arr[top] * (s.isEmpty() ? n : (n-s.peek()-1));
-            res  = Math.max(res, curr);
+            int curr = hist[top] * ((s.isEmpty()) ? n : (n-s.peek()-1));
+            res = Math.max(res,curr);
         }
         
         return res;
     }
 }
+
 
 
 //{ Driver Code Starts.
