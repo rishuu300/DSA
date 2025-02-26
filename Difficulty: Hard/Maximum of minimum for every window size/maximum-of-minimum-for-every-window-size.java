@@ -12,7 +12,7 @@ public class Main {
             String[] input = line.split(" ");
             int[] arr = Arrays.stream(input).mapToInt(Integer::parseInt).toArray();
             Solution solution = new Solution();
-            ArrayList<Integer> result = solution.maxOfMin(arr);
+            ArrayList<Integer> result = solution.maxOfMins(arr);
             for (int val : result) {
                 System.out.print(val + " ");
             }
@@ -27,18 +27,14 @@ public class Main {
 
 
 class Solution {
-    // Function to find maximum of minimums of every window size.
-    public ArrayList<Integer> maxOfMin(int[] arr) {
+    public ArrayList<Integer> maxOfMins(int[] arr) {
         int n = arr.length;
+        
+        ArrayList<Integer> ans = new ArrayList<>(Collections.nCopies(n, -1));
         Stack<Integer> s = new Stack<>();
-        ArrayList<Integer> ans = new ArrayList<>(n);
-        
+
         for(int i=0; i<n; i++){
-            ans.add(0);
-        }
-        
-        for(int i=0; i<n; i++){
-            while(!s.isEmpty() && arr[s.peek()]>arr[i]){
+            while(!s.isEmpty() && arr[s.peek()] > arr[i]){
                 int top = s.pop();
                 int range = (s.isEmpty()) ? i : i-s.peek()-1;
                 ans.set(range-1, Math.max(ans.get(range-1), arr[top]));
