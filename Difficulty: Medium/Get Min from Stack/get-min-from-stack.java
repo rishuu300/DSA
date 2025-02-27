@@ -1,95 +1,76 @@
 //{ Driver Code Starts
 import java.util.*;
 
+class Get_Min_From_Stack {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(); // Number of test cases
 
+        while (T-- > 0) {
+            int q = sc.nextInt(); // Number of queries
+            Solution g = new Solution();
 
-class Get_Min_From_Stack
-{
-	public static void main(String args[])
-	{
-		Scanner sc = new Scanner(System.in);
-		int T = sc.nextInt();
-		while(T>0)
-		{
-			int q = sc.nextInt();
-			GfG g = new GfG();
-			while(q>0)
-			{
-				int qt = sc.nextInt();
-				
-				if(qt == 1)
-				{
-					int att = sc.nextInt();
-					g.push(att);
-					//System.out.println(att);
-				}
-				else if(qt == 2)
-				{
-					System.out.print(g.pop()+" ");
-				}
-				else if(qt == 3)
-				{
-					System.out.print(g.getMin()+" ");
-				}
-			
-			q--;
-			}
-			System.out.println();
-		T--;
-		
-System.out.println("~");
+            while (q-- > 0) {
+                int qt = sc.nextInt();
+
+                if (qt == 1) {
+                    int att = sc.nextInt();
+                    g.push(att);
+                } else if (qt == 2) {
+                    g.pop(); // Just call pop(), do not print anything
+                } else if (qt == 3) {
+                    System.out.print(g.peek() + " "); // Print top element
+                } else if (qt == 4) {
+                    System.out.print(g.getMin() + " "); // Print minimum element
+                }
+            }
+            System.out.println("\n~");
+        }
+        sc.close();
+    }
 }
-		
-	}
-}
-
-
 
 // } Driver Code Ends
 
 
-class GfG {
-    int minEle;
-    Stack<Integer> s;
-    
-    GfG() {
-	    minEle = Integer.MAX_VALUE;
-	    s = new Stack<>();
-	}
-	
-    int getMin() {
-	    if(s.isEmpty()){
-	        return -1;
-	    }
-	    return minEle;
-    }
-    
-    int pop() {
-        if(s.isEmpty()){
-            return -1;
-        }
-        
-        int top = s.pop();
-        if(top < minEle){
-            int temp = minEle;
-            minEle = 2 * minEle - top;
-            top = temp;
-        }
-        return top;
+class Solution {
+    private Stack<Long> stack;
+    private long min;
+
+    public Solution() {
+        stack = new Stack<>();
     }
 
-    void push(int x) {
-        if(s.isEmpty()){
-            minEle = x;
-            s.push(x);
+    public void push(int x) {
+        if (stack.isEmpty()) {
+            min = x;
+            stack.push((long) x);
+        } else {
+            if (x < min) {
+                stack.push(2L * x - min);
+                min = x;
+            } else {
+                stack.push((long) x);
+            }
         }
-        else if(x < minEle){
-            s.push(2 * x - minEle);
-            minEle = x;
+    }
+
+    public void pop() {
+        if (!stack.isEmpty()) {
+            long top = stack.pop();
+            if (top < min) {
+                min = 2 * min - top;
+            }
         }
-        else{
-            s.push(x);
-        }
-    }	
+    }
+
+    public int peek() {
+        if (stack.isEmpty()) return -1;
+        long top = stack.peek();
+        return (top < min) ? (int) min : (int) top;
+    }
+
+    public int getMin() {
+        return stack.isEmpty() ? -1 : (int) min;
+    }
 }
-
