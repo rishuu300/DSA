@@ -74,6 +74,16 @@ class GfG {
         return root;
     }
 
+    public static Node searchBSTRecursive(Node root, int num) {
+        if (root == null || root.data == num)
+            return root; // Found the node or reached the end
+
+        if (num < root.data)
+            return searchBSTRecursive(root.left, num); // Search in left subtree
+        else
+            return searchBSTRecursive(root.right, num); // Search in right subtree
+    }
+
     static void printInorder(Node root) {
         if (root == null) return;
 
@@ -95,8 +105,8 @@ class GfG {
             // Read x and y from two separate lines
             int x = Integer.parseInt(br.readLine());
             int y = Integer.parseInt(br.readLine());
-            Node n1 = new Node(x);
-            Node n2 = new Node(y);
+            Node n1 = searchBSTRecursive(root, x);
+            Node n2 = searchBSTRecursive(root, y);
             System.out.println(g.LCA(root, n1, n2).data);
             t--;
 
@@ -124,23 +134,26 @@ class Node
 
 class Solution {
     Node LCA(Node root, Node n1, Node n2) {
-        Node res = null;
-        while(root!=null){
-            if(n1.data < root.data && n2.data > root.data || n1.data > root.data && n2.data < root.data){
-               res = root;
-               break;
-            }
-            else if(n1.data == root.data || n2.data == root.data){
-                res = root;
-                break;
-            }
-            else if(n1.data < root.data && n2.data < root.data){
-               root = root.left;
-            }
-            else{
-               root = root.right;
-            }
+        if(root == null){
+            return null;
         }
-        return res;
+        
+        if(root == n1 || root == n2){
+            return root;
+        }
+        
+        Node lca1 = LCA(root.left, n1, n2);
+        Node lca2 = LCA(root.right, n1, n2);
+        
+        if(lca1 != null && lca2 != null){
+            return root;
+        }
+        
+        if(lca1 != null){
+            return lca1;
+        }
+        else{
+            return lca2;
+        }
     }
 }
