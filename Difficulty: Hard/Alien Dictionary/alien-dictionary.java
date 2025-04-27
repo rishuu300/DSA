@@ -7,53 +7,78 @@ import java.util.*;
 
 // User function Template for Java
 class Solution {
-    public String findOrder(String[] words) {
-        Map<Character, Set<Character>> graph = new HashMap<>();
-        Map<Character, Integer> inDegree = new HashMap<>();
+    String topoSort(List<List<Integer>> adj, int V, Set<Character> set){
+        int inDegree[] = new int[V];
         
-        for (String word : words) {
-            for (char c : word.toCharArray()) {
-                graph.putIfAbsent(c, new HashSet<>());
-                inDegree.putIfAbsent(c, 0);
+        for(int i=0; i<V; i++){
+            for(int j : adj.get(i)){
+                inDegree[j]++;
             }
         }
         
-        for (int i = 0; i < words.length - 1; i++) {
-            String w1 = words[i], w2 = words[i + 1];
-            if (w1.length() > w2.length() && w1.startsWith(w2)) return "";
+        Queue<Integer> q = new LinkedList<>();
+        
+        for (char ch : set){
+            if (inDegree[ch - 'a'] == 0) {
+                q.add(ch - 'a');
+            }
+        }
+        
+        String result = "";
+        
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            result += (char)(curr + 'a');
             
-            int minLen = Math.min(w1.length(), w2.length());
-            for (int j = 0; j < minLen; j++) {
-                char c1 = w1.charAt(j), c2 = w2.charAt(j);
-                if (c1 != c2) {
-                    if (!graph.get(c1).contains(c2)) {
-                        graph.get(c1).add(c2);
-                        inDegree.put(c2, inDegree.get(c2) + 1);
-                    }
-                    break;
+            for(int j : adj.get(curr)){
+                inDegree[j]--;
+                
+                if(inDegree[j] == 0){
+                  q.add(j);
                 }
             }
         }
         
-        Queue<Character> queue = new LinkedList<>();
-        for (char c : inDegree.keySet()) {
-            if (inDegree.get(c) == 0) queue.offer(c);
+        if (result.length() < set.size()){
+            return "";
         }
         
-        StringBuilder result = new StringBuilder();
-        while (!queue.isEmpty()) {
-            char current = queue.poll();
-            result.append(current);
-            
-            for (char neighbor : graph.get(current)) {
-                inDegree.put(neighbor, inDegree.get(neighbor) - 1);
-                if (inDegree.get(neighbor) == 0) queue.offer(neighbor);
+        return result;
+    }
+    
+    public String findOrder(String[] words) {
+        Set<Character> set = new HashSet<>();
+        for(String word : words){
+            for(char ch : word.toCharArray()){
+                set.add(ch);
             }
         }
         
-        if (result.length() != inDegree.size()) return "";
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            adj.add(new ArrayList<>());
+        }
         
-        return result.toString();
+        for(int i=0; i<words.length-1; i++){
+            String s1 = words[i];
+            String s2 = words[i+1];
+            int len = Math.min(s1.length(), s2.length());
+            
+            boolean foundDifference = false;
+            for (int j = 0; j < len; j++) {
+                if (s1.charAt(j) != s2.charAt(j)) {
+                    adj.get(s1.charAt(j) - 'a').add(s2.charAt(j) - 'a');
+                    foundDifference = true;
+                    break;
+                }
+            }
+            
+            if (!foundDifference && s1.length() > s2.length()) {
+                return "";
+            }
+        }
+        
+        return topoSort(adj, 26, set);
     }
 }
 
