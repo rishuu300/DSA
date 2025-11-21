@@ -1,23 +1,21 @@
-#User function Template for python3
-
 class Solution:    
-    def minimumPlatform(self,arr,dep):
+    def minPlatform(self, arr, dep):
         n = len(arr)
         arr.sort()
         dep.sort()
         
-        i = j = 0
-        count = 0
-        max_platform = 0
+        count, res = 0, 0
         
-        while(i< n and j < n):
+        i, j = 0, 0
+        
+        while i < n and j < n:
             if arr[i] <= dep[j]:
-                i += 1
                 count += 1
-                max_platform = max(max_platform, count)
+                i += 1
             else:
-                j += 1
                 count -= 1
+                j += 1
+            
+            res = max(res, count)
         
-        return max_platform
-        
+        return res
