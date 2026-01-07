@@ -1,35 +1,30 @@
 class Solution {
-    public static int balanceSums(int[][] mat) {
-        int n = mat.length;
-        int[] rowSum = new int[n];
-        int[] colSum = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                rowSum[i] += mat[i][j];
-                colSum[j] += mat[i][j];
+    public static int balanceSums(int[][] matrix) {
+        int N = matrix.length;
+        int maxSum = Integer.MIN_VALUE;
+        int rowSum[] = new int[N];
+        int colSum[] = new int[N];
+        
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                rowSum[i] += matrix[i][j];
+                maxSum = Math.max(maxSum, rowSum[i]);
+                
+                colSum[j] += matrix[i][j];
+                maxSum = Math.max(maxSum, colSum[j]);
             }
         }
-
-        int maxSum = 0;
-        for (int i = 0; i < n; i++) {
-            maxSum = Math.max(maxSum, rowSum[i]);
-            maxSum = Math.max(maxSum, colSum[i]);
+        
+        int rowMax = 0;
+        for(int i=0; i<N; i++){
+            rowMax += (maxSum - rowSum[i]);
         }
-
-        int operations = 0;
-        int i = 0, j = 0;
-        while (i < n && j < n) {
-            int diff = Math.min(maxSum - rowSum[i], maxSum - colSum[j]);
-            mat[i][j] += diff;
-            rowSum[i] += diff;
-            colSum[j] += diff;
-            operations += diff;
-
-            if (rowSum[i] == maxSum) i++;
-            if (colSum[j] == maxSum) j++;
+        
+        int colMax = 0;
+        for(int i=0; i<N; i++){
+            colMax += (maxSum - colSum[i]);
         }
-
-        return operations;
+        
+        return Math.max(rowMax, colMax);
     }
 }
