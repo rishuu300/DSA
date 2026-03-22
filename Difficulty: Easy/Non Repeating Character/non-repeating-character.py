@@ -1,12 +1,17 @@
 class Solution:
     def nonRepeatingChar(self,s):
-        mp = {}
+        count = [-1]*26
         
-        for char in s:
-            mp[char] = mp.get(char, 0) + 1
+        for i in range(len(s)):
+            if count[ord(s[i]) - ord('a')] == -1:
+                count[ord(s[i]) - ord('a')] = i
+            else:
+                count[ord(s[i]) - ord('a')] = -2
         
-        for char in s:
-            if mp[char] == 1:
-                return char
+        res = 1e5
         
-        return '$'
+        for i in range(26):
+            if count[i] >= 0:
+                res = min(res, count[i])
+        
+        return s[res] if res != 1e5 else-1
